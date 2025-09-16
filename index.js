@@ -29,8 +29,7 @@ scene.add(line);
 const stars = getStarfield({ numStars: 1000, fog: false });
 scene.add(stars);
 
-// check here for more datasets ...
-// https://github.com/martynafford/natural-earth-geojson
+// check here for more datasets ... https://github.com/martynafford/natural-earth-geojson
 // non-geojson datasets: https://www.naturalearthdata.com/downloads/
 fetch('./geojson/ne_110m_land.json')
   .then(response => response.text())
@@ -44,6 +43,25 @@ fetch('./geojson/ne_110m_land.json')
       },
     });
     scene.add(countries);
+  });
+
+// Add country outlines
+fetch('./geojson/countries.json')
+  .then(response => response.text())
+  .then(text => {
+    const outlineData = JSON.parse(text);
+    const outlines = drawThreeGeo({
+      json: outlineData,
+      radius: 2.01, // Slightly above the surface
+      type: 'line',
+      materialOptions: {
+        color: 0x000000,
+        linewidth: 2,
+        opacity: 0.7,
+        transparent: true,
+      },
+    });
+    scene.add(outlines);
   });
 
 function animate() {
